@@ -1,0 +1,155 @@
+*,
+*::before,
+*::after {
+    -webkit-box-sizing: border-box;
+       -moz-box-sizing: border-box;
+            box-sizing: border-box;
+}
+
+html, body {
+    margin: 0;
+    padding: 0;
+}
+
+
+html, body ,#app {
+    height: 100%;
+}
+
+body {
+    font-family: "Ubuntu", "Helvetica", "微軟雅黑", "Microsoft YaHei", "Segoe UI Semibold", "Segoe UI", 
+            "Lucida Grande", Verdana, Arial, Helvetica, sans-serif;
+}
+
+#app {
+    height: 100%;   
+}
+
+.g-signin2 {
+    position: absolute;
+    margin-top: 50px;
+    left: 50%;
+    transform: translate(-50%,0);
+}
+
+#header {
+    padding-top: 40px;
+    padding-bottom: 40px;
+    font-size: 50px;
+    text-align: center;
+}
+
+.w-100 {
+    width: 100%;
+}
+
+#content-div {
+    text-align: center;
+}
+
+#url-textbox {
+    width: 80%;
+    height: 40px;
+    max-width: 800px;
+    font-size: 18px;
+    border: 1px #000 solid;
+    padding-left: 20px;
+    padding-right: 20px;
+    border-radius: 20px;
+    margin-right: 10px;
+}
+
+#url-textbox::placeholder {
+    color: #888888;
+    opacity: 1;
+}
+
+#submit-button {
+    width: 40px;
+    height: 40px;
+    font-size: 20px;
+    border-radius: 50%;
+    border: 2px #999 solid;
+    background: #DDD;
+    cursor: pointer;
+    outline: none;
+}
+
+#input-main-div {
+    margin: 15px;
+}
+
+#input-sub-div {
+    margin: 15px;
+}
+
+#custom-key-label:hover {
+    opacity: 1 !important;
+}
+
+#custom-key-label {
+    font-weight: bold;
+    font-size: 20px;
+}
+
+#custom-key-textbox {
+    margin-left: 10px;
+    width: 40%;
+    max-width: 300px;
+    height: 30px;
+    border: 1px #111 solid;
+    border-radius: 15px;
+    font-size: 17px;
+    padding-left: 10px;
+    padding-right: 10px;
+}
+
+#form-info {
+    margin-top: 20px;
+}
+
+.form-info-pannel {
+    width: calc(80% + 50px);
+    max-width: 850px;
+    margin: 0 auto;
+    border-width: 4px;
+    border-style: solid;
+    border-radius: 20px;
+    padding: 20px 30px;
+    text-align: left;
+}
+
+#form-success-info {
+    border-color: green;
+    color: green;
+}
+
+a {
+    text-decoration: none;
+    color: rgb(63, 135, 166);
+    outline: none;
+}
+
+#form-failed-info {
+    border-color: red;
+    color: red;
+}
+
+#form-copy-btn {
+    outline: none;
+    border-radius: 50%;
+    width: 35px;
+    height: 35px;
+    font-size: 20px;
+    background-color: white;
+    border: white;
+    cursor: pointer;
+    margin-left: 5px;
+    -webkit-transition: all 0.5s; 
+    transition: all 0.5s; 
+}
+
+#form-copy-btn:hover {
+    background-color: #DDD;
+
+}
