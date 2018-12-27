@@ -16,15 +16,16 @@
 </head>
 <body>
     <div id="app">
+        <a id="logout-btn" v-on:click="logout()" v-if="islogin">{{ username }} Logout</a>
         <div class="w-100" id="header">BB's URL Shortener</div>
         <div class="w-100" id="content-div" v-if="islogin">
-            <form v-on:submit.prevent="create" autocomplete="off">
+            <form v-on:submit.prevent="create" autocomplete="off" id="main-form">
                 <div id="input-main-div">
                     <input type="text" id="url-textbox" placeholder="URL to be shortened" v-model="InputUrl">
                     <button type="submit" id="submit-button"><i class="fas fa-link" v-if="!FormProccessing"></i><i class="fas fa-spinner fa-spin" v-else></i></button>
                 </div>
                 <div id="input-sub-div">
-                    <label id="custom-key-label" v-on:keydown.enter.prevent v-bind:style="{opacity: (CustomKey.length === 0 ? 0.3 : 1)}">Custom link:
+                    <label id="custom-key-label" v-on:keydown.enter.prevent v-bind:style="{opacity: (CustomKey.length === 0 ? 0.3 : 1)}">Custom Key:
                         <input type="text" id="custom-key-textbox" v-model="CustomKey">
                     </label>
                 </div>
@@ -37,6 +38,28 @@
                     </div>
                 </div>
             </form>
+            <div id="entries-div">
+                <div id="no-entries" v-if="!entries.length">No existing entry.</div>
+                <div id="entries-caption" v-else>
+                    <div id="orig-url-caption">Original URL</div>
+                    <div id="short-url-caption">Shortened Link</div>
+                    <div id="click-cnt-caption">Clicks</div>
+                    <div id="creation-date-caption">Created At</div>
+                </div>
+                <div v-for="e in entries" class="entry">
+                    <div class="orig-url"><a :href="e.original_url" target="_blank">{{ e.original_url }}</a></div>
+                    <div class="short-url">
+                        <a :href="e.shortened_url" target="_blank">{{ e.shortened_url.replace("https://", "") }}</a>
+                        <button class="clip-btn entry-copy-btn" type="button" :data-clipboard-text="e.shortened_url"><i class="far fa-copy"></i></button>
+                    </div>
+                    <div class="click-cnt">
+                        {{ e.count }}
+                    </div>
+                    <div class="creation-date">
+                        {{ format_date(e.timestamp) }}
+                    </div>
+                </div>
+            </div>
         </div>
         
         <div class="w-100" id="login-div" v-bind:style="{display: (islogin? 'none' : 'block')}">

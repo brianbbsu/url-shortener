@@ -1,30 +1,25 @@
-function ginit(){
-}
+function ginit(){}
 
 function onSignIn(googleUser) {
     var profile = googleUser.getBasicProfile();
     console.log('Name: ' + profile.getName());
     console.log('Email: ' + profile.getEmail());
     app.islogin = true;
-}
-
-function fsubmit(event){
-    console.log(event);
-    event.preventDefault();
-    return false;
+    app.username = profile.getName();
+    app.query();
 }
 
 var app = new Vue({
     el: '#app',
     data: {
-        message: "Hello, bb.",
         islogin: false,
+        username: "",
         InputUrl: "",
         CustomKey: "",
         FlashStatus: "",
-        FlashData: {
-        },
-        FormProccessing: false
+        FlashData: {},
+        FormProccessing: false,
+        entries: []
     },
     methods: {
         create(){
@@ -47,6 +42,7 @@ var app = new Vue({
                 this.FlashStatus = "success";
                 this.FlashData = data;
                 console.log(data);
+                app.query();
             }).fail(jqXHR => {
                 this.FlashData = jqXHR.responseText;
                 this.FlashStatus = "failed";
@@ -54,14 +50,38 @@ var app = new Vue({
             }).always(() => {
                 this.FormProccessing = false;  
             });
+        }, 
+        query(){
+            let GoogleAuth = gapi.auth2.getAuthInstance();
+            let id_token = GoogleAuth.currentUser.get().getAuthResponse().id_token;
+            let data = {
+                token: id_token,
+                op: "query"
+            };
+            $.get({
+                url: "https://asia-northeast1-url-redirect-bb.cloudfunctions.net/redirect-node",
+                data: data,
+            }).done(data => {
+                this.entries = data.data;
+                console.log(data);
+            }).fail(jqXHR => {
+                this.FlashData = jqXHR.responseText;
+                this.FlashStatus = "failed";
+                this.entries = []
+                console.log("Error: " + jqXHR.responseText);
+            })
+        },
+        logout(){
+            let GoogleAuth = gapi.auth2.getAuthInstance();
+            GoogleAuth.signOut();
+            this.islogin = false;
+            this.FlashStatus = "";
+            this.entries = []
+        }, 
+        format_date(s){
+            return new Date(s).toLocaleDateString("en-US", {month: 'short', year: 'numeric', day: '2-digit'});
         }
     }
 });
 
 new ClipboardJS('.clip-btn');
-
-/*
-function gonload(){
-    GoogleAuth = gapi.auth2.getAuthInstance();
-    GoogleAuth.isSignedIn.listen(st => {app.islogin = st});
-}*/

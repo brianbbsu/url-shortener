@@ -2,3 +2,5 @@ node/url-redirect-bb-0094c14a4e88.json
 node/node_modules
 node/test_server.js
 node/auth.js
+node/tmp.js
+node/config.json
