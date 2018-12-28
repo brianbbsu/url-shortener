@@ -93,14 +93,14 @@ function create(req,res,user){
 }
 
 function query(req,res,user){
-  let q = datastore.createQuery("url_entry").filter("creator","=", user);
+  let q = datastore.createQuery("url_entry").filter("creator","=", user).select(['__key__', 'url', 'timestamp', 'count']);
   datastore.runQuery(q).then(([entries]) =>  {
     let data = entries.map((e) => ({
       key: e[datastore.KEY].name,
       shortened_url: "https://brian.su/r/" + e[datastore.KEY].name,
       original_url: e.url,
       timestamp: e.timestamp,
-      creator: e.creator,
+      creator: user,
       count: e.count
     }));
     data.sort((a,b) => {
@@ -114,11 +114,47 @@ function query(req,res,user){
   });
 }
 
+function del(req, res, user){
+  if(!("key" in req.query))res.status(400).send("Expect 'key' param!!!");
+  else {
+    datastore.get(datastore.key(["url_entry",req.query.key])).then(([e]) => {
+      if(!e)res.status(404).send("Requested entry not found.");
+      else if(e.creator !== user)res.status(403).send("You can only delete your own URL.");
+      else{
+        datastore.delete(datastore.key(["url_entry",req.query.key]));
+        res.status(200).json({
+          status: "OK"
+        });
+      }
+    });
+  }
+}
+
+function redirect(req, res){
+  let key = req.query.key;
+  key = key.replace(/\?.*$/g,"");
+  if(key === "")res.redirect("https://brian.su/url-shortener/");
+  else {
+    if(key.endsWith('/'))key = key.slice(0, -1);
+    datastore.get(datastore.key(["url_entry",key])).then(([e]) => {
+      console.log(e);
+      if(!e)res.status(404).send("Key Not Found!!!");
+      else{
+        e.count += 1;
+        datastore.update(e).then(() => {
+          res.redirect(e.url);
+        });
+      }
+    });
+  }
+}
+
 function operation(req, res, user){
   let op = req.query.op;
   if(op === "create")create(req,res,user);
   else if(op === "query")query(req,res,user);
-  
+  else if(op === "delete")del(req, res, user);
+  else res.status(400).send("Unknown Operation");
 }
 
 exports.get = (req, res) => {
@@ -128,24 +164,9 @@ exports.get = (req, res) => {
     verify(req.query.token,
       (user) => {operation(req,res, user)},
       () => {res.status(403).send("Access Denied!");});
-  }else if('key' in req.query){
-    let key = req.query.key;
-    key = key.replace(/\?.*$/g,"");
-    if(key === "")res.redirect("https://brian.su/url-shortener/");
-    else {
-      if(key.endsWith('/'))key = key.slice(0, -1);
-      datastore.get(datastore.key(["url_entry",key])).then(([e]) => {
-        console.log(e);
-        if(!e)res.status(404).send("Key Not Found!!!");
-        else{
-          e.count += 1;
-          datastore.update(e).then(() => {
-            res.redirect(e.url);
-          });
-        }
-      });
-    }
-  } else {
+  }
+  else if('key' in req.query)redirect(req, res);
+  else {
     res.status(400).send("Expect 'key' param!!!");
   }
 };

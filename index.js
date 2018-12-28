@@ -79,7 +79,7 @@ var app = new Vue({
             this.entries = []
         }, 
         format_date(s){
-            return new Date(s).toLocaleDateString("en-US", {month: 'short', year: 'numeric', day: '2-digit'});
+            return new Date(s/1000).toLocaleDateString("en-US", {month: 'short', year: 'numeric', day: '2-digit'});
         }
     }
 });
