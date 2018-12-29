@@ -41,12 +41,10 @@ var app = new Vue({
                 this.CustomKey = "";
                 this.FlashStatus = "success";
                 this.FlashData = data;
-                console.log(data);
                 app.query();
             }).fail(jqXHR => {
                 this.FlashData = jqXHR.responseText;
                 this.FlashStatus = "failed";
-                console.log("Error: " + jqXHR.responseText);
             }).always(() => {
                 this.FormProccessing = false;  
             });
@@ -68,8 +66,7 @@ var app = new Vue({
                 this.FlashData = jqXHR.responseText;
                 this.FlashStatus = "failed";
                 this.entries = []
-                console.log("Error: " + jqXHR.responseText);
-            })
+            });
         },
         logout(){
             let GoogleAuth = gapi.auth2.getAuthInstance();
@@ -80,8 +77,49 @@ var app = new Vue({
         }, 
         format_date(s){
             return new Date(s/1000).toLocaleDateString("en-US", {month: 'short', year: 'numeric', day: '2-digit'});
+        },
+        delete_entry(e){
+            console.log(e.currentTarget.dataset);
+            let key = e.currentTarget.dataset.key;
+            let index = e.currentTarget.dataset.index;
+            if(confirm("Delete entry with key '" + e.currentTarget.dataset.key + "'?"))
+            {
+                let GoogleAuth = gapi.auth2.getAuthInstance();
+                let id_token = GoogleAuth.currentUser.get().getAuthResponse().id_token;
+                let data = {
+                    token: id_token,
+                    op: "delete",
+                    key: e.currentTarget.dataset.key
+                };
+                $.get({
+                    url: "https://asia-northeast1-url-redirect-bb.cloudfunctions.net/redirect-node",
+                    data: data,
+                }).done(() => {
+                    let mask = $(".entry-deleted-mask[data-key=\"" + key + "\"]");
+                    mask.addClass("show");
+                    setTimeout(() => {
+                        mask.removeClass("show");
+                        this.entries.splice(index, 1);
+                    }, 1500);
+                }).fail(jqXHR => {
+                    this.FlashData = jqXHR.responseText;
+                    this.FlashStatus = "failed";
+                });
+                
+            }
         }
     }
 });
 
-new ClipboardJS('.clip-btn');
+var clipboard = new ClipboardJS('.clip-btn');
+
+clipboard.on('success', function(e) {
+    tippy(e.trigger, {content: "Copied!", trigger: "manual", placement: "right"});
+    e.trigger._tippy.show();
+    setTimeout(() => {
+        e.trigger._tippy.hide();
+    }, 1000);
+    e.clearSelection();
+});
+
+window.addEventListener('scroll', () => tippy.hideAllPoppers())
