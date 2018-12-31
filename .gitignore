@@ -1,6 +1,6 @@
-node/url-redirect-bb-0094c14a4e88.json
-node/node_modules
-node/test_server.js
-node/auth.js
-node/tmp.js
-node/config.json
+server/url-redirect-bb-0094c14a4e88.json
+server/node_modules
+server/test_server.js
+server/auth.js
+server/tmp.js
+server/config.json

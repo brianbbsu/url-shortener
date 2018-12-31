@@ -10,13 +10,9 @@
     outline: none !important;
 }
 
-html, body {
+html, body, #app {
     margin: 0;
     padding: 0;
-}
-
-
-html, body ,#app {
     min-height: 100%;
 }
 
@@ -33,11 +29,6 @@ body {
 a {
     text-decoration: none;
     color: #039be5;
-    outline: none;
-}
-
-button {
-    outline: none !important;
 }
 
 #header {
@@ -82,7 +73,6 @@ button {
 }
 
 #privacy-note-header {
-    width: 100%;
     font-weight: bold;
     margin-bottom: 10px;
 }

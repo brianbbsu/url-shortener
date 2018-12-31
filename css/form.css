@@ -80,14 +80,12 @@
     color: green;
 }
 
-
-
 #form-failed-info {
     border-color: red;
     color: red;
 }
 
-#form-copy-btn {
+.large-btn {
     outline: none;
     border-radius: 50%;
     width: 35px;
@@ -101,7 +99,6 @@
     transition: all 0.5s; 
 }
 
-#form-copy-btn:hover {
+.large-btn:hover {
     background-color: #DDD;
-
 }
