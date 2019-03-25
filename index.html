@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>BB's URL Shortener</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/normalize/8.0.0/normalize.min.css" />
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.0/clipboard.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/vue/2.5.17/vue.min.js"></script>
+    <script src="https://apis.google.com/js/platform.js?onload=ginit"></script>
+    <script src="https://unpkg.com/tippy.js@3/dist/tippy.all.min.js"></script>
+    <link rel="stylesheet" href="./css/main.css">
+    <link rel="stylesheet" href="./css/form.css">
+    <link rel="stylesheet" href="./css/entry.css">
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.3.1/css/all.css" integrity="sha384-mzrmE5qonljUremFsqc01SB46JvROS7bZs3IO2EmfFsd15uHvIt+Y8vEf7N7fWAU" crossorigin="anonymous">
+    <meta name="google-signin-client_id" content="932478565653-a54e4pb8auqb6p0jo0kqnjdbqpuchnuq.apps.googleusercontent.com">
+</head>
+<body>
+    <div id="app">
+        <a id="logout-btn" v-on:click="logout()" v-if="islogin">{{ username }} Logout</a>
+        <div id="header">BB's URL Shortener</div>
+        <div id="content-div" v-if="islogin">
+            <form v-on:submit.prevent="create" autocomplete="off" id="main-form">
+                <div id="input-main-div">
+                    <input type="text" id="url-textbox" placeholder="URL to be shortened" v-model="InputUrl">
+                    <button type="submit" id="submit-button"><i class="fas fa-link" v-if="!FormProccessing"></i><i class="fas fa-spinner fa-spin" v-else></i></button>
+                </div>
+                <div id="input-sub-div">
+                    <label id="custom-key-label" v-on:keydown.enter.prevent v-bind:style="{opacity: (CustomKey.length === 0 ? 0.3 : 1)}">Custom Key:
+                        <input type="text" id="custom-key-textbox" v-model="CustomKey">
+                    </label>
+                </div>
+                <div id="form-info">
+                    <div class="form-info-pannel" id="form-success-info" v-if="FlashStatus === 'success'">
+                        {{ FlashData.message }}&nbsp;&nbsp;Short URL : <a id="form-short-url" v-bind:href="FlashData.shortened_url" target="_blank">{{ FlashData.shortened_url }}</a><button class="clip-btn large-btn" type="button" id="form-copy-btn" data-clipboard-target="#form-short-url"><i class="far fa-copy"></i></button>
+                    </div>
+                    <div class="form-info-pannel" id="form-failed-info" v-if="FlashStatus === 'failed'">
+                        {{ FlashData }}
+                    </div>
+                </div>
+            </form>
+            <div id="entries-div">
+                <div id="no-entries" v-if="!entries.length">No existing entry.</div>
+                <div id="entries-caption" v-else>
+                    <div id="orig-url-caption">Original URL</div>
+                    <div id="short-url-caption">Shortened Link</div>
+                    <div id="click-cnt-caption">Clicks</div>
+                    <div id="creation-date-caption">Created At</div>
+                </div>
+                <div v-for="(e,i) in entries" class="entry">
+                    <div class="entry-deleted-mask" :data-key="e.key">DELETED</div>
+                    <div class="orig-url"><a :href="e.original_url" target="_blank">{{ e.original_url }}</a></div>
+                    <div class="short-url">
+                        <a :href="e.shortened_url" target="_blank">{{ e.shortened_url.replace("https://", "") }}</a>
+                        <button class="clip-btn entry-copy-btn entry-btn" type="button" :data-clipboard-text="e.shortened_url"><i class="far fa-copy"></i></button>
+                    </div>
+                    <div class="click-cnt">
+                        {{ e.count }}
+                    </div>
+                    <div class="creation-date">
+                        {{ format_date(e.timestamp) }}
+                    </div>
+                    <div class="operation">
+                        <button class="entry-delete-btn entry-btn" type="button" :data-key="e.key" :data-index="i" @click="delete_entry"><i class="fas fa-trash-alt"></i></button>
+                        <button class="entry-edit-btn entry-btn" type="button" style="visibility: hidden;"><i class="fas fa-edit"></i></button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div id="login-div" v-bind:style="{display: (islogin? 'none' : 'block')}">
+            <div class="g-signin2" data-onsuccess="onSignIn" data-theme="dark" data-width="250" data-height="50"></div>
+            <div id="privacy-note">
+                <div id="privacy-note-header">Disclaimer</div>
+                All submitted URLs are visible to the owner (i.e. Brian Su).
+                The system may not be safe enough to put sensitive data here.
+            </div>
+        </div>
+        <div id="footer">
+                Brian Su&nbsp;&nbsp;
+                <a href="https://github.com/brianbbsu/url-shortener" target="_blank" id="github-link">
+                    <img height="16" width="16" src="github.svg" />
+                </a>
+                &nbsp;&nbsp;2018-2019&nbsp;&nbsp;&nbsp;&nbsp;Currently only support screen with width 900px and up.
+        </div>
+    </div>
+    <script src="./index.js"></script>
+</body>
+</html>

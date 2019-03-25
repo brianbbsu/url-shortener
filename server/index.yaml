@@ -1,0 +1,7 @@
+indexes:
+- kind: url_entry
+  properties:
+  - name: creator
+  - name: count
+  - name: timestamp
+  - name: url
