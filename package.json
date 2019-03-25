@@ -1,7 +1,7 @@
 {
   "name": "redirect-node",
   "version": "1.0.0",
-  "description": "",
+  "description": "Server for BB's URL shortener / redirector.",
   "main": "index.js",
   "dependencies": {
     "@google-cloud/datastore": "1.4.2",
@@ -9,12 +9,9 @@
     "request": "^2.88.0",
     "express": "^4.16.3"
   },
-  "devDependencies": {
-    "express": "4.16.3"
-  },
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
-  "author": "",
+  "author": "Brian Su",
   "license": "ISC"
 }
