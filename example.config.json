@@ -1,6 +1,6 @@
 {
     "gcp_project": "gcp-project-name",
     "OAuth_client_id": "12345-example.apps.googleusercontent.com",
-    "url_base": "https://example.com/r/",
+    "base_url": "https://example.com/r/",
     "allowed_user" : ["example@gmail.com"]
 }
