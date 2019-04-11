@@ -1,0 +1,17 @@
+div.message-div {
+    font-size: 22px;
+    padding: 30px 0;
+    line-height: 200%;
+}
+
+span.error-code {
+    font-weight: bold;
+    font-size: 30px;
+}
+
+#message-url {
+    background-color: lightyellow;
+    border: 3px solid lightyellow;
+    border-radius: 10px;
+    font-weight: lighter;
+}

@@ -38,7 +38,7 @@ a {
     text-align: center;
 }
 
-#content-div {
+#content-div, #content-div-nojs {
     text-align: center;
 }
 

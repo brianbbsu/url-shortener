@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>404 NOT FOUND</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/normalize/8.0.0/normalize.min.css" />
+    <link rel="stylesheet" href="./css/main.css">
+    <link rel="stylesheet" href="./css/404.css">
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.3.1/css/all.css" integrity="sha384-mzrmE5qonljUremFsqc01SB46JvROS7bZs3IO2EmfFsd15uHvIt+Y8vEf7N7fWAU" crossorigin="anonymous">
+    <style>#content-div-nojs {display: none;}</style>
+    <noscript>
+        <style>
+            #content-div {
+                display: none;
+            }
+            #content-div-nojs {
+                display: block;
+            }
+        </style>
+    </noscript>
+</head>
+<body>
+    <div id="header">BB's URL Shortener</div>
+    <div id="content-div">
+        <div class="message-div">
+            <span class="error-code">404 Not Found!</span> <br>
+            Entry with key <span id="message-url">...</span> not found, please try again.
+        </div>
+    </div>
+    <div id="content-div-nojs">
+        <div class="message-div">
+            <span class="error-code">404 Not Found!</span> <br>
+            Entry not found, please try again.
+        </div>
+    </div>
+    <div id="footer">
+            Brian Su&nbsp;&nbsp;
+            <a href="https://github.com/brianbbsu/url-shortener" target="_blank" id="github-link">
+                <img height="16" width="16" src="./img/github.svg" />
+            </a>
+            &nbsp;&nbsp;2018-2019
+    </div>
+    <script>
+        window.onload = function(){
+            let url = new URL(window.location.href);
+            let key = url.searchParams.get("key");
+            document.getElementById("message-url").innerText = key || "ERROR!";
+        }
+    </script>
+</body>
+</html>
