@@ -1,0 +1,23 @@
+{
+  "name": "dashboard",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "gulp": "^4.0.1",
+    "gulp-clean": "^0.4.0",
+    "gulp-clean-css": "^4.2.0",
+    "gulp-connect": "^5.7.0",
+    "gulp-if": "^2.0.2",
+    "gulp-replace": "^1.0.0",
+    "gulp-sass": "^4.0.2",
+    "gulp-sourcemaps": "^2.6.5",
+    "gulp-terser": "^1.1.7",
+    "yargs": "^13.2.2"
+  }
+}

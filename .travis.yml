@@ -1,0 +1,31 @@
+dist: xenial
+branches:
+  only:
+    - master
+
+language: node
+node_js:
+  - "8"
+
+cache: npm
+
+install:
+  - npm install --prefix dashboard && npm install -g gulp-cli
+
+script:
+  - gulp --cwd dashboard build
+
+deploy:
+  provider: pages
+  skip-cleanup: true
+  github-token: $GITHUB_TOKEN
+  local-dir: dashboard/public
+  on:
+    branch: master
+
+notifications:
+  email:
+      recipients:
+        - brianbb.su@gmail.com
+      on_success: always
+      on_failure: always
