@@ -133,6 +133,29 @@ function del(req, res, user) {
   }
 }
 
+function edit(req, res, user) {
+  if (!("key" in req.query)) res.status(400).send("Expect 'key' param!!!");
+  else if (!("url" in req.query)) res.status(400).send("Expect 'url' param!!!");
+  else if (req.query.url.length === 0) res.status(400).send("URL should NOT be empty!!!");
+  else{
+    let key = req.query.key;
+    key = key.replace(/\?.*$/g, "");
+    if (key.endsWith('/')) key = key.slice(0, -1);
+    datastore.get(datastore.key(["url_entry", key])).then(([e]) => {
+      console.log(e);
+      if (!e) res.status(404).send("Key Not Found!");
+      else {
+        e.url = req.query.url;
+        datastore.update(e).then(() => {
+          res.status(200).json({
+            status: "OK"
+          });
+        });
+      }
+    });
+  }
+}
+
 function redirect(req, res) {
   let key = req.query.key;
   key = key.replace(/\?.*$/g, "");
@@ -145,7 +168,9 @@ function redirect(req, res) {
       else {
         e.count += 1;
         datastore.update(e).then(() => {
-          res.redirect(e.url);
+          let url = e.url;
+          if(!url.startsWith("http://") && !url.startsWith("https://"))url = "http://" + url;
+          res.redirect(url);
         });
       }
     });
@@ -157,6 +182,7 @@ function operation(req, res, user) {
   if (op === "create") create(req, res, user);
   else if (op === "query") query(req, res, user);
   else if (op === "delete") del(req, res, user);
+  else if (op === "edit") edit(req, res, user);
   else res.status(400).send("Unknown Operation");
 }
 
