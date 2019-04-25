@@ -19,7 +19,10 @@
 </head>
 <body>
     <div id="app">
-        <a id="logout-btn" v-on:click="logout()" v-if="islogin">{{ username }} Logout</a>
+        <div id="current-user-div" v-if="islogin">
+            Current User:&nbsp;&nbsp;<span id="current-user">{{ username }}</span>&nbsp;&nbsp;-&nbsp;&nbsp;
+            <a id="logout-btn" v-on:click="logout()">Logout</a>
+        </div>
         <div id="header">BB's URL Shortener</div>
         <div id="content-div" v-if="islogin">
             <form v-on:submit.prevent="create" autocomplete="off" id="main-form">
@@ -34,7 +37,8 @@
                 </div>
                 <div id="form-info">
                     <div class="form-info-pannel" id="form-success-info" v-if="FlashStatus === 'success'">
-                        {{ FlashData.message }}&nbsp;&nbsp;Short URL : <a id="form-short-url" v-bind:href="FlashData.shortened_url" target="_blank">{{ FlashData.shortened_url }}</a><button class="clip-btn large-btn" type="button" id="form-copy-btn" data-clipboard-target="#form-short-url"><i class="far fa-copy"></i></button>
+                        {{ FlashData.message }}&nbsp;&nbsp;Short URL : <a id="form-short-url" v-bind:href="FlashData.shortened_url" target="_blank">{{ remove_http(FlashData.shortened_url) }}</a>
+                        <button class="clip-btn large-btn" type="button" id="form-copy-btn" :data-clipboard-text="FlashData.shortened_url"><i class="far fa-copy"></i></button>
                     </div>
                     <div class="form-info-pannel" id="form-failed-info" v-if="FlashStatus === 'failed'">
                         {{ FlashData }}
@@ -42,7 +46,7 @@
                 </div>
             </form>
             <div id="entries-div">
-                <div id="no-entries" v-if="!entries.length">No existing entry.</div>
+                <div id="no-entries" v-if="entries && !entries.length">No existing entry.</div>
                 <div id="entries-caption" v-else>
                     <div id="orig-url-caption">Original URL</div>
                     <div id="short-url-caption">Shortened Link</div>
@@ -53,7 +57,9 @@
                     <div class="entry-deleted-mask" :data-key="e.key">DELETED</div>
                     <div class="orig-url"><a :href="e.original_url" target="_blank">{{ e.original_url }}</a></div>
                     <div class="short-url">
-                        <a :href="e.shortened_url" target="_blank">{{ e.shortened_url.replace("https://", "") }}</a>
+                        <div class="url-div">
+                            <a :href="e.shortened_url" target="_blank">{{ remove_http(e.shortened_url) }}</a>
+                        </div>
                         <button class="clip-btn entry-copy-btn entry-btn" type="button" :data-clipboard-text="e.shortened_url"><i class="far fa-copy"></i></button>
                     </div>
                     <div class="click-cnt">

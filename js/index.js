@@ -9,6 +9,8 @@ function onSignIn(googleUser) {
     app.query();
 }
 
+const backend_url = "https://asia-northeast1-url-redirect-bb.cloudfunctions.net/redirect-node";
+
 var app = new Vue({
     el: '#app',
     data: {
@@ -19,7 +21,7 @@ var app = new Vue({
         FlashStatus: "",
         FlashData: {},
         FormProccessing: false,
-        entries: []
+        entries: null
     },
     methods: {
         create(){
@@ -34,7 +36,7 @@ var app = new Vue({
             };
             if(this.CustomKey !== "")data.key = this.CustomKey;
             $.get({
-                url: "https://asia-northeast1-url-redirect-bb.cloudfunctions.net/redirect-node",
+                url: backend_url,
                 data: data,
             }).done(data => {
                 this.InputUrl = "";
@@ -57,7 +59,7 @@ var app = new Vue({
                 op: "query"
             };
             $.get({
-                url: "https://asia-northeast1-url-redirect-bb.cloudfunctions.net/redirect-node",
+                url: backend_url,
                 data: data,
             }).done(data => {
                 this.entries = data.data;
@@ -78,6 +80,9 @@ var app = new Vue({
         format_date(s){
             return new Date(s/1000).toLocaleDateString("en-US", {month: 'short', year: 'numeric', day: '2-digit'});
         },
+        remove_http(s){
+            return s.replace(/^https?:\/\//i, "");
+        },
         delete_entry(e){
             console.log(e.currentTarget.dataset);
             let key = e.currentTarget.dataset.key;
@@ -92,7 +97,7 @@ var app = new Vue({
                     key: e.currentTarget.dataset.key
                 };
                 $.get({
-                    url: "https://asia-northeast1-url-redirect-bb.cloudfunctions.net/redirect-node",
+                    url: backend_url,
                     data: data,
                 }).done(() => {
                     let mask = $(".entry-deleted-mask[data-key=\"" + key + "\"]");

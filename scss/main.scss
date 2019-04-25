@@ -77,10 +77,19 @@ a {
     margin-bottom: 10px;
 }
 
-#logout-btn {
+
+#current-user-div {
     position: fixed;
     right: 20px;
     top: 10px;
+    display: inline-block;
+}
+
+#current-user {
+    font-weight: bold;
+}
+
+#logout-btn {
     cursor: pointer;
     font-weight: bold;
     color: #999;
