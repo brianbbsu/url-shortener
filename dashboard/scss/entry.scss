@@ -1,0 +1,149 @@
+#entries-div {
+    padding: 20px 20px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+}
+
+#no-entries {
+    font-size: 20px;
+    padding: 30px;
+    color: #AAA;
+
+}
+
+#entries-caption {
+    width: 850px;
+    padding: 15px 2px;
+}
+
+.entry{
+    width: 850px;
+    height: 40px;
+    padding: 5px 2px;
+    border-radius: 20px;
+    position: relative;
+    font-size: 15px;
+    &:hover {
+        background-color: #EEE;
+    }
+}
+
+@mixin no-overflow {
+    overflow:hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.entry > div {
+    @include no-overflow;
+    font-size: 15px;
+}
+
+.entry .entry-btn {
+    display: none;
+    border-radius: 50%;
+    width: 30px;
+    height: 30px;
+    font-size: 15px;
+    background-color: transparent;
+    border: transparent;
+    cursor: pointer;
+    -webkit-transition: all 0.5s; 
+    transition: all 0.5s; 
+}
+
+.entry:hover .entry-btn {
+    display: inline-block;
+}
+
+.entry-btn:hover {
+    background-color: #CCC;
+}
+
+@keyframes delete {
+    0% {right: 100%;color: #F77;}
+    25% {right: 0;color: #F77;}
+    50% {right: 0;background-color: #F77;color: #FFF;}
+    100% {right: 0;background-color: #FFF;color: #FFF;}
+}
+
+.entry-deleted-mask {
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 100%;
+    border-radius: 20px;
+    background-color: #F77;
+    font-size: 17px !important;
+    letter-spacing: 3px;
+    line-height: 40px;
+    font-weight: 800;
+    text-transform: uppercase;
+    z-index: 10;
+    display: none;
+    &.show {
+        display: block;
+        animation-name: delete;
+        animation-duration: 1.5s;
+        animation-fill-mode: forwards;
+    }
+}
+
+#orig-url-caption, .orig-url {
+    width: 300px;
+    padding: 0 5px;
+    display:inline-block;
+    line-height: 30px;
+}
+
+#short-url-caption {
+    width: 250px;
+    padding: 0 5px;
+    display: inline-block;
+    line-height: 30px;
+}
+
+.short-url {
+    width: 250px;
+    padding: 0 5px;
+    display: inline-flex;
+    line-height: 30px;
+    & .url-div {
+        @include no-overflow;
+        max-width: 250px - 40px - 5px;
+        margin-right: 5px;
+    }
+}
+
+.short-url, .orig-url{
+    text-align: left;
+}
+#click-cnt-caption, .click-cnt {
+    padding: 0 5px;
+    width: 65px;
+    display: inline-block;
+    text-align: center;
+    line-height: 30px;
+}
+
+#creation-date-caption, .creation-date {
+    padding: 0 5px;
+    width: 120px;
+    display: inline-block;
+    text-align: center;
+    line-height: 30px;
+}
+
+#creation-date-caption {
+    margin-right: 80px;
+}
+
+.operation {
+    line-height: 30px;
+    width: 80px;
+    display: inline-block;
+    text-align: center;
+}
