@@ -1,9 +1,9 @@
 #entries-div {
-    padding: 20px 20px;
+    padding: 20px;
     display: flex;
-    justify-content: center;
     align-items: center;
     flex-direction: column;
+    font-size: 15px;
 }
 
 #no-entries {
@@ -13,18 +13,28 @@
 
 }
 
-#entries-caption {
-    width: 850px;
+/* width and height of the entry row */
+$entry-width: 850px;
+$entry-height: 30px;
+
+/* width for each caption and field */
+$orig-url-width: 300px;
+$short-url-width: 250px;
+$click-cnt-width: 65px;
+$creation-date-width: 120px;
+$operation-width: 80px;
+
+#entries-caption-div {
+    width: $entry-width;
     padding: 15px 2px;
 }
 
 .entry{
-    width: 850px;
-    height: 40px;
+    width: $entry-width;
+    height: $entry-height + 10px;
     padding: 5px 2px;
     border-radius: 20px;
     position: relative;
-    font-size: 15px;
     &:hover {
         background-color: #EEE;
     }
@@ -38,35 +48,54 @@
 
 .entry > div {
     @include no-overflow;
-    font-size: 15px;
 }
 
-.entry .entry-btn {
-    display: none;
+.entry-btn {
     border-radius: 50%;
     width: 30px;
     height: 30px;
-    font-size: 15px;
     background-color: transparent;
     border: transparent;
     cursor: pointer;
     -webkit-transition: all 0.5s; 
     transition: all 0.5s; 
+    display: none;
+    .entry:hover & {
+        display: inline-block;
+    }
+    &:hover {
+        background-color: #CCC;
+    }
 }
 
-.entry:hover .entry-btn {
-    display: inline-block;
+/* Delete Related */
+
 }
 
-.entry-btn:hover {
-    background-color: #CCC;
-}
+$delete-mask-color: #F77;
+$delete-text-color: #FFF;
 
 @keyframes delete {
-    0% {right: 100%;color: #F77;}
-    25% {right: 0;color: #F77;}
-    50% {right: 0;background-color: #F77;color: #FFF;}
-    100% {right: 0;background-color: #FFF;color: #FFF;}
+    0% {
+        right: 100%;
+        background-color: $delete-mask-color;
+        color: $delete-mask-color;
+    }
+    25% {
+        right: 0;
+        background-color: $delete-mask-color;
+        color: $delete-mask-color;
+    }
+    50% {
+        right: 0;
+        color: $delete-text-color;
+        background-color: $delete-mask-color;
+    }
+    100% {
+        right: 0;
+        color: $delete-text-color;
+        background-color: $delete-text-color;
+    }
 }
 
 .entry-deleted-mask {
@@ -76,7 +105,6 @@
     left: 0;
     right: 100%;
     border-radius: 20px;
-    background-color: #F77;
     font-size: 17px !important;
     letter-spacing: 3px;
     line-height: 40px;
@@ -87,63 +115,37 @@
     &.show {
         display: block;
         animation-name: delete;
-        animation-duration: 1.5s;
+        animation-duration: 1s;
         animation-fill-mode: forwards;
     }
 }
 
-#orig-url-caption, .orig-url {
-    width: 300px;
+/* Field related */
+
+.caption, .entry-field {
+    line-height: $entry-height;
+    display: inline-block;
     padding: 0 5px;
-    display:inline-block;
-    line-height: 30px;
+    text-align: center;
 }
 
-#short-url-caption {
-    width: 250px;
-    padding: 0 5px;
-    display: inline-block;
-    line-height: 30px;
+.url-field {
+    text-align: left;
 }
 
 .short-url {
-    width: 250px;
-    padding: 0 5px;
     display: inline-flex;
-    line-height: 30px;
     & .url-div {
         @include no-overflow;
-        max-width: 250px - 40px - 5px;
+        max-width: $short-url-width - 40px - 5px;
         margin-right: 5px;
     }
 }
 
-.short-url, .orig-url{
-    text-align: left;
-}
-#click-cnt-caption, .click-cnt {
-    padding: 0 5px;
-    width: 65px;
-    display: inline-block;
-    text-align: center;
-    line-height: 30px;
-}
+/* set width for each caption and field */ 
 
-#creation-date-caption, .creation-date {
-    padding: 0 5px;
-    width: 120px;
-    display: inline-block;
-    text-align: center;
-    line-height: 30px;
-}
-
-#creation-date-caption {
-    margin-right: 80px;
-}
-
-.operation {
-    line-height: 30px;
-    width: 80px;
-    display: inline-block;
-    text-align: center;
-}
+#orig-url-caption, .orig-url { width: $orig-url-width; }
+#short-url-caption, .short-url { width: $short-url-width; }
+#click-cnt-caption, .click-cnt { width: $click-cnt-width; }
+#creation-date-caption, .creation-date { width: $creation-date-width; }
+#operation-caption, .operation { width: $operation-width; }

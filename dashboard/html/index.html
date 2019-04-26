@@ -47,25 +47,26 @@
             </form>
             <div id="entries-div">
                 <div id="no-entries" v-if="entries && !entries.length">No existing entry.</div>
-                <div id="entries-caption" v-else>
-                    <div id="orig-url-caption">Original URL</div>
-                    <div id="short-url-caption">Shortened Link</div>
-                    <div id="click-cnt-caption">Clicks</div>
-                    <div id="creation-date-caption">Created At</div>
+                <div id="entries-caption-div" v-else>
+                    <div id="orig-url-caption" class="caption">Original URL</div>
+                    <div id="short-url-caption" class="caption">Shortened Link</div>
+                    <div id="click-cnt-caption" class="caption">Clicks</div>
+                    <div id="creation-date-caption" class="caption">Created At</div>
+                    <div id="operation-caption" class="caption"></div>
                 </div>
-                <div v-for="(e,i) in entries" class="entry">
-                    <div class="entry-deleted-mask" :data-key="e.key">DELETED</div>
-                    <div class="orig-url"><a :href="e.original_url" target="_blank">{{ e.original_url }}</a></div>
-                    <div class="short-url">
+                <div v-for="(e,i) in entries" class="entry" :data-key="e.key">
+                    <div class="entry-deleted-mask">DELETED</div>
+                    <div class="orig-url entry-field url-field"><a :href="e.original_url" target="_blank">{{ e.original_url }}</a></div>
+                    <div class="short-url entry-field url-field">
                         <div class="url-div">
                             <a :href="e.shortened_url" target="_blank">{{ remove_http(e.shortened_url) }}</a>
                         </div>
                         <button class="clip-btn entry-copy-btn entry-btn" type="button" :data-clipboard-text="e.shortened_url"><i class="far fa-copy"></i></button>
                     </div>
-                    <div class="click-cnt">
+                    <div class="click-cnt entry-field">
                         {{ e.count }}
                     </div>
-                    <div class="creation-date">
+                    <div class="creation-date entry-field">
                         {{ format_date(e.timestamp) }}
                     </div>
                     <div class="operation">
