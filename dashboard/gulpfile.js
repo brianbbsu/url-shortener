@@ -3,7 +3,8 @@ var CleanCSS = require('gulp-clean-css');
 var SASS = require('gulp-sass');
 var sourceMap = require('gulp-sourcemaps');
 var Clean = require('gulp-clean');
-var terser = require('gulp-terser');
+var babel = require('gulp-babel');
+var uglify = require('gulp-uglify');
 var connect = require('gulp-connect');
 var gulpif = require('gulp-if');
 var replace = require('gulp-replace');
@@ -11,18 +12,18 @@ var replace = require('gulp-replace');
 var argv = require('yargs').argv;
 
 function clean() {
-    return gulp.src('public/', {read: false, allowEmpty: true})
+    return gulp.src('public/', { read: false, allowEmpty: true })
         .pipe(Clean());
 }
 
 function css() {
     return gulp.src('scss/*.scss')
-    .pipe(sourceMap.init())
-    .pipe(SASS())
-    .pipe(CleanCSS())
-    .pipe(sourceMap.write('.'))
-    .pipe(gulp.dest('public/css'))
-    .pipe(connect.reload())
+        .pipe(sourceMap.init())
+        .pipe(SASS())
+        .pipe(CleanCSS())
+        .pipe(sourceMap.write('.'))
+        .pipe(gulp.dest('public/css'))
+        .pipe(connect.reload())
 }
 
 function static() {
@@ -38,11 +39,14 @@ function html() {
 
 function js() {
     return gulp.src('js/*.js')
-        .pipe(gulpif(argv.local, 
-            replace(/^const backend_url.*$/m, 
+        .pipe(gulpif(argv.local,
+            replace(/^const backend_url.*$/m,
                 "const backend_url = 'http://localhost:3000/';")))
         .pipe(sourceMap.init())
-        .pipe(terser())
+        .pipe(babel({
+            presets: ['@babel/env']
+        }))
+        .pipe(uglify())
         .pipe(sourceMap.write('.'))
         .pipe(gulp.dest('public/js'))
         .pipe(connect.reload())
@@ -64,8 +68,8 @@ function watchFiles() {
     gulp.watch("static/**", static);
 }
 
-const build = gulp.series(clean, 
-                gulp.parallel(css, static, html, js));
+const build = gulp.series(clean,
+    gulp.parallel(css, static, html, js));
 const watch = gulp.series(build, watchFiles);
 
 
