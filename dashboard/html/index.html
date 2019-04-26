@@ -10,7 +10,9 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.0/clipboard.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/vue/2.5.17/vue.min.js"></script>
     <script src="https://apis.google.com/js/platform.js?onload=ginit"></script>
-    <script src="https://unpkg.com/tippy.js@3/dist/tippy.all.min.js"></script>
+    <script src="https://unpkg.com/popper.js@1"></script>
+    <script src="https://unpkg.com/tippy.js@4"></script>
+    <link rel="stylesheet" href="https://unpkg.com/tippy.js@4/themes/light-border.css"/>
     <link rel="stylesheet" href="./css/main.css">
     <link rel="stylesheet" href="./css/form.css">
     <link rel="stylesheet" href="./css/entry.css">
@@ -69,9 +71,21 @@
                     <div class="creation-date entry-field">
                         {{ format_date(e.timestamp) }}
                     </div>
-                    <div class="operation">
-                        <button class="entry-delete-btn entry-btn" type="button" :data-key="e.key" :data-index="i" @click="delete_entry"><i class="fas fa-trash-alt"></i></button>
+                    <div class="operation entry-field">
+                        <button class="entry-delete-btn entry-btn" type="button" :data-key="e.key" @click="delete_confirm"><i class="fas fa-trash-alt"></i></button>
                         <button class="entry-edit-btn entry-btn" type="button" style="visibility: hidden;"><i class="fas fa-edit"></i></button>
+                        <div class="delete-confirm-template" style="display: none;">
+                            <div class="confirm-tip">
+                                <div class="confirm-tip-info">
+                                    Are you sure?
+                                </div>
+                                <div class="confirm-tip-btn-div">
+                                    <button class="confirm-tip-btn" type="button" :data-key="e.key">
+                                        DELETE
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>

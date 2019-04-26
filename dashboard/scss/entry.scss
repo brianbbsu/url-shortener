@@ -70,6 +70,29 @@ $operation-width: 80px;
 
 /* Delete Related */
 
+.confirm-tip {
+    margin: 10px;
+    text-align: center;
+    &-info {
+        font-size: 15px;
+        margin-bottom: 10px;
+    }
+    &-btn {
+        color: red;
+        padding: 2px;
+        font-size: 15px;
+        height: 30px;
+        width: 100px;
+        border-radius: 5px;
+        border: 3px solid red;
+        background: white;
+        -webkit-transition: all 0.5s;
+        transition: all 0.5s;
+        &:hover, &:focus {
+            background: red;
+            color: white;
+        }
+    }
 }
 
 $delete-mask-color: #F77;

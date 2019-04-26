@@ -1,13 +1,4 @@
-function ginit(){}
-
-function onSignIn(googleUser) {
-    var profile = googleUser.getBasicProfile();
-    console.log('Name: ' + profile.getName());
-    console.log('Email: ' + profile.getEmail());
-    app.islogin = true;
-    app.username = profile.getName();
-    app.query();
-}
+function ginit() { }
 
 const backend_url = "https://asia-northeast1-url-redirect-bb.cloudfunctions.net/redirect-node";
 
@@ -24,7 +15,7 @@ var app = new Vue({
         entries: null
     },
     methods: {
-        create(){
+        create() {
             this.FlashStatus = "";
             this.FormProccessing = true;
             let GoogleAuth = gapi.auth2.getAuthInstance();
@@ -34,7 +25,7 @@ var app = new Vue({
                 op: "create",
                 url: this.InputUrl,
             };
-            if(this.CustomKey !== "")data.key = this.CustomKey;
+            if (this.CustomKey !== "") data.key = this.CustomKey;
             $.get({
                 url: backend_url,
                 data: data,
@@ -48,10 +39,10 @@ var app = new Vue({
                 this.FlashData = jqXHR.responseText;
                 this.FlashStatus = "failed";
             }).always(() => {
-                this.FormProccessing = false;  
+                this.FormProccessing = false;
             });
-        }, 
-        query(){
+        },
+        query() {
             let GoogleAuth = gapi.auth2.getAuthInstance();
             let id_token = GoogleAuth.currentUser.get().getAuthResponse().id_token;
             let data = {
@@ -70,61 +61,96 @@ var app = new Vue({
                 this.entries = []
             });
         },
-        logout(){
+        logout() {
             let GoogleAuth = gapi.auth2.getAuthInstance();
             GoogleAuth.signOut();
             this.islogin = false;
             this.FlashStatus = "";
             this.entries = []
-        }, 
-        format_date(s){
-            return new Date(s/1000).toLocaleDateString("en-US", {month: 'short', year: 'numeric', day: '2-digit'});
         },
-        remove_http(s){
+        format_date(s) {
+            return new Date(s / 1000).toLocaleDateString("en-US", { month: 'short', year: 'numeric', day: '2-digit' });
+        },
+        remove_http(s) {
             return s.replace(/^https?:\/\//i, "");
         },
-        delete_entry(e){
-            console.log(e.currentTarget.dataset);
-            let key = e.currentTarget.dataset.key;
-            let index = e.currentTarget.dataset.index;
-            if(confirm("Delete entry with key '" + e.currentTarget.dataset.key + "'?"))
-            {
-                let GoogleAuth = gapi.auth2.getAuthInstance();
-                let id_token = GoogleAuth.currentUser.get().getAuthResponse().id_token;
-                let data = {
-                    token: id_token,
-                    op: "delete",
-                    key: e.currentTarget.dataset.key
-                };
-                $.get({
-                    url: backend_url,
-                    data: data,
-                }).done(() => {
-                    let mask = $(".entry-deleted-mask[data-key=\"" + key + "\"]");
-                    mask.addClass("show");
-                    setTimeout(() => {
-                        mask.removeClass("show");
-                        this.entries.splice(index, 1);
-                    }, 1500);
-                }).fail(jqXHR => {
-                    this.FlashData = jqXHR.responseText;
-                    this.FlashStatus = "failed";
-                });
-                
-            }
+        delete_confirm(e) {
+            let target = e.currentTarget;
+            let key = target.dataset.key;
+            tippy(target, {
+                interactive: true,
+                appendTo: "parent",
+                trigger: "manual",
+                placement: "bottom",
+                arrow: true,
+                theme: "light-border",
+                distance: 5,
+                duration: [300, 50],
+                onHidden: (e) => {
+                    e.destroy();
+                },
+                content: document.querySelector(`.entry[data-key="${key}"] .delete-confirm-template`).innerHTML
+            });
+            target._tippy.show();
+            $(`.tippy-tooltip .confirm-tip-btn[data-key="${key}"]`).one('click', (e) => {
+                let key = e.currentTarget.dataset.key;
+                document.querySelector(`.entry-delete-btn[data-key="${key}"]`)._tippy.hide();
+                app.delete_entry(key);
+            });
+            $(`.entry[data-key="${key}"]`).one("mouseleave", (e) => {
+                document.querySelector(`.entry-delete-btn[data-key="${e.currentTarget.dataset.key}"]`)._tippy.hide();
+            });
+        },
+        delete_entry(key) {
+            let GoogleAuth = gapi.auth2.getAuthInstance();
+            let id_token = GoogleAuth.currentUser.get().getAuthResponse().id_token;
+            let data = {
+                token: id_token,
+                op: "delete",
+                key: key
+            };
+            $.get({
+                url: backend_url,
+                data: data,
+            }).done(() => {
+                let mask = $(".entry[data-key=\"" + key + "\"] > .entry-deleted-mask");
+                mask.addClass("show");
+                setTimeout(() => {
+                    mask.removeClass("show");
+                    this.entries.splice(this.entries.findIndex((el) => {
+                        return el.key === key;
+                    }), 1);
+                }, 1000);
+            }).fail(jqXHR => {
+                this.FlashData = jqXHR.responseText;
+                this.FlashStatus = "failed";
+            });
         }
     }
 });
 
+function onSignIn(googleUser) {
+    var profile = googleUser.getBasicProfile();
+    app.islogin = true;
+    app.username = profile.getName();
+    app.query();
+}
+
+
 var clipboard = new ClipboardJS('.clip-btn');
 
-clipboard.on('success', function(e) {
-    tippy(e.trigger, {content: "Copied!", trigger: "manual", placement: "right"});
+clipboard.on('success', function (e) {
+    tippy(e.trigger, {
+        content: "Copied!",
+        trigger: "manual",
+        placement: "right",
+        duration: [150, 200]
+    });
     e.trigger._tippy.show();
     setTimeout(() => {
         e.trigger._tippy.hide();
-    }, 1000);
+    }, 700);
     e.clearSelection();
 });
 
-window.addEventListener('scroll', () => tippy.hideAllPoppers())
+window.addEventListener('scroll', () => tippy.hideAll({ duration: 0 }));
