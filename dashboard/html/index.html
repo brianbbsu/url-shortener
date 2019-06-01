@@ -58,7 +58,11 @@
                 </div>
                 <div v-for="(e,i) in entries" class="entry" :data-key="e.key">
                     <div class="entry-deleted-mask">DELETED</div>
-                    <div class="orig-url entry-field url-field"><a :href="e.original_url" target="_blank">{{ e.original_url }}</a></div>
+                    <div class="orig-url entry-field url-field">
+                        <div class="url-div">
+                            <a :href="e.original_url" target="_blank">{{ e.original_url }}</a>
+                        </div>
+                    </div>
                     <div class="short-url entry-field url-field">
                         <div class="url-div">
                             <a :href="e.shortened_url" target="_blank">{{ remove_http(e.shortened_url) }}</a>

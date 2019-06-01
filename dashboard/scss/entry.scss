@@ -46,10 +46,6 @@ $operation-width: 80px;
     white-space: nowrap;
 }
 
-.entry > div {
-    @include no-overflow;
-}
-
 .entry-btn {
     border-radius: 50%;
     width: 30px;
@@ -147,19 +143,21 @@ $delete-text-color: #FFF;
 
 .caption, .entry-field {
     line-height: $entry-height;
-    display: inline-block;
+    display: inline-flex;
     padding: 0 5px;
-    text-align: center;
+    justify-content: center;
 }
 
 .url-field {
-    text-align: left;
+    justify-content: left;
+}
+
+.url-div {
+    @include no-overflow;
 }
 
 .short-url {
-    display: inline-flex;
     & .url-div {
-        @include no-overflow;
         max-width: $short-url-width - 40px - 5px;
         margin-right: 5px;
     }
