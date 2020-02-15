@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>404 NOT FOUND</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/normalize/8.0.0/normalize.min.css" />
+    <link rel="stylesheet" href="./css/main.css">
+    <link rel="stylesheet" href="./css/404.css">
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.3.1/css/all.css" integrity="sha384-mzrmE5qonljUremFsqc01SB46JvROS7bZs3IO2EmfFsd15uHvIt+Y8vEf7N7fWAU" crossorigin="anonymous">
+    <style>#content-div-nojs {display: none;}</style>
+    <noscript>
+        <style>
+            #content-div {
+                display: none;
+            }
+            #content-div-nojs {
+                display: block;
+            }
+        </style>
+    </noscript>
+</head>
+<body>
+    <div id="app">
+        <div id="header">BB's URL Shortener</div>
+        <div id="content-div">
+            <div id="message-div">
+                <span id="error-code-span">404 Not Found!</span> <br>
+                <span class="no-break"><span id="message-url">...</span> not found,</span> <span class="no-break">please fix it and try again.</span>
+            </div>
+            <div id="retry-div">
+                <div id="input-url-div"><span id="prefix-span"><i class="fas fa-arrow-right" id="right-arrow"></i> brian.su/r/</span><input id="key-input" type="text" /></div>
+                <div id="input-btn-div"><button onclick="go()" id="go-btn">Go! <i class="far fa-paper-plane"></i></button></div>
+            </div>
+        </div>
+        <div id="content-div-nojs">
+            <div class="message-div">
+                <span class="error-code">404 Not Found!</span> <br>
+                Entry not found, please try again.
+            </div>
+        </div>
+        <div id="footer">
+                Brian Su&nbsp;&nbsp;
+                <a href="https://github.com/brianbbsu/url-shortener" target="_blank" id="github-link">
+                    <img height="16" width="16" src="./img/github.svg" />
+                </a>
+                &nbsp;&nbsp;2018-2019
+        </div>
+    </div>
+    <script>
+        window.onload = function(){
+            let url = new URL(window.location.href);
+            let key = url.searchParams.get("key");
+            document.getElementById("message-url").innerText = key || "ERROR!";
+            document.getElementById("key-input").value = key || "";
+            document.getElementById("key-input").addEventListener("keydown", function(event) {
+                if(event.keyCode === 13) {
+                    document.getElementById("go-btn").click();
+                }
+            });
+        }
+        function go(){
+            let key = document.getElementById("key-input").value;
+            if(!key){
+                alert("Key should not be empty!");
+                return;
+            }
+            window.location = "https://brian.su/r/" + key;
+        }
+    </script>
+</body>
+</html>
